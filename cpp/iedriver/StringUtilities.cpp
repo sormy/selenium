@@ -13,6 +13,8 @@
 
 #include "StringUtilities.h"
 
+#include <sstream>
+
 #define WHITESPACE " \n\r\t"
 #define WIDE_WHITESPACE L" \n\r\t"
 
@@ -112,6 +114,18 @@ std::string StringUtilities::ToString(const std::wstring& input) {
     output = &string_buffer[0];
   }
   return output;
+}
+
+std::wstring StringUtilities::ToWString(const long long input) {
+  std::wostringstream os;
+  os << input;
+  return os.str();
+}
+
+std::string StringUtilities::ToString(const long long input) {
+  std::ostringstream os;
+  os << input;
+  return os.str();
 }
 
 std::string StringUtilities::Format(const char* format, ...) {

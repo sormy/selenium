@@ -1,5 +1,7 @@
 # Selenium
 
+**This is an unofficial fork that targets Windows 2000**
+
 Selenium is an umbrella project for various tools and libraries that
 enable automation of web browsers.  Amongst other things it provides
 the support infrastructure for the [W3C WebDriver
@@ -10,6 +12,53 @@ The project is made possible by volunteer contributors who have put in
 thousands of hours of their own time, and made the source code freely
 available under the [Apache 2.0
 license](https://code.google.com/p/selenium/source/browse/COPYING).
+
+## About fork
+
+This fork has compatibility fixes to make IEServerDriver to work on Windows 2000.
+
+Goals:
+
+- Windows 2000 runs faster in virtual machines and can provide better preformance
+- Windows 2000 can provide options to test also IE 5 and IE 5.5 that are not
+  available on Windows XP
+
+Prerequisites:
+
+- Visual Studio 2012 Express for dev environment.
+- Visual Studio 2008 SP1 Pro for build environment, Service Pack 1 is REQUIRED,
+  express version won't work because it doesn't have `atlmfc`.
+
+Build:
+
+- Open `WebDriver.sln`
+- Choose all c++ projects
+- Right click and choose `Properties`
+- Configuration \ General \ Platform Toolset
+- Choose `Visual Studio 2008 (v90)` from dropdown
+- Choose `Win32` platform and `Release` configuration
+- Right click on `IEDriverServer` and choose `Build`
+- Produced `IEDriverServer.exe` must be in `build\cpp\Win32\Release`
+
+Dependencies:
+
+- Produced `IEDriverServer.exe` depends on `gdiplus.dll`. You could get it from
+  [WindowsXP-KB975337-x86-ENU.exe](https://download.microsoft.com/download/a/b/c/abc45517-97a0-4cee-a362-1957be2f24e1/WindowsXP-KB975337-x86-ENU.exe). Double
+  click installer, it will ask where to extract, extract somewhere. Needed file
+  will be located in this path after extraction: `asms/10/msft/windows/gdiplus/gdiplus.dll`.
+  Place this file side by side with `IEDriverServer.exe` so it can find it.
+
+What works:
+
+- IEDriverServer can start, can communicate with Selenium Server, can open
+  page, can send keys to browser, can click.
+
+What doesn't work (yet):
+
+- Slow sendKeys
+- Connection timeouts
+- Screenshots have wrong vertical size
+- Wait functions do not work well
 
 ## Repositories
 

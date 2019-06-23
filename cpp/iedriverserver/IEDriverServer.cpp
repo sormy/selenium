@@ -95,6 +95,7 @@ bool ExtractResource(unsigned short resource_id,
 
 std::wstring GetProcessArchitectureDescription() {
   std::wstring arch_description = L"32-bit";
+  /*
   SYSTEM_INFO system_info;
   ::GetNativeSystemInfo(&system_info);
   if (system_info.wProcessorArchitecture != 0) {
@@ -106,6 +107,7 @@ std::wstring GetProcessArchitectureDescription() {
     }
     ::CloseHandle(process_handle);
   }
+  */
 
   return arch_description;
 }

@@ -268,7 +268,7 @@ std::string Server::DispatchCommand(const std::string& uri,
       session_id = this->CreateSession();
     }
 
-    SessionHandle session_handle = NULL;
+    SessionHandle session_handle;
     if (!this->LookupSession(session_id, &session_handle)) {
       if (command == webdriver::CommandType::Quit) {
         // Calling quit on an invalid session should be a no-op.

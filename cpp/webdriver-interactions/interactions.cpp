@@ -345,13 +345,25 @@ void sendModifierKeyEvent(wchar_t c, bool& shiftKey, bool& controlKey,
   }
 }
 
+const HINSTANCE GetCurrentModuleWin2k()
+{
+	MEMORY_BASIC_INFORMATION mbi = {};
+	if (0 == VirtualQuery((LPCTSTR)&sendKeys, &mbi, sizeof(mbi))) {
+		return NULL;
+	}
+	return (HINSTANCE) mbi.AllocationBase;
+}
+
 static HKL attachInputToIEThread(HWND directInputTo)
 {
 	DWORD currThreadId = GetCurrentThreadId();
 	DWORD ieWinThreadId = GetWindowThreadProcessId(directInputTo, NULL);
 
-	GetModuleHandleEx(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS, (LPCTSTR)
-			&sendKeys, &moduleHandle);
+	//GetModuleHandleEx(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS, (LPCTSTR)
+	//		&sendKeys, &moduleHandle);
+
+	// Windows 2000 has no GetModuleHandleEx API
+	moduleHandle = GetCurrentModuleWin2k();
 
 	hook = SetWindowsHookEx(WH_GETMESSAGE, (HOOKPROC) &GetMessageProc,
 			moduleHandle, ieWinThreadId);

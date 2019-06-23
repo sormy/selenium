@@ -248,16 +248,33 @@ int VariantUtilities::GetPropertyNameList(IDispatch* object_dispatch,
                                           std::vector<std::wstring>* property_names) {
   LOG(TRACE) << "Entering Script::GetPropertyNameList";
 
-  CComPtr<IDispatchEx> dispatchex;
-  HRESULT hr = object_dispatch->QueryInterface<IDispatchEx>(&dispatchex);
-  DISPID current_disp_id;
-  hr = dispatchex->GetNextDispID(fdexEnumAll, DISPID_STARTENUM, &current_disp_id);
-  while (hr == S_OK) {
-    CComBSTR member_name_bstr;
-    dispatchex->GetMemberName(current_disp_id, &member_name_bstr);
-    std::wstring member_name = member_name_bstr;
-    property_names->push_back(member_name);
-    hr = dispatchex->GetNextDispID(fdexEnumAll, current_disp_id, &current_disp_id);
+  CComPtr<ITypeInfo> typeinfo;
+  HRESULT get_type_info_result =
+    object_dispatch->GetTypeInfo(0, LOCALE_USER_DEFAULT, &typeinfo);
+  TYPEATTR* type_attr;
+  if (SUCCEEDED(get_type_info_result) &&
+      SUCCEEDED(typeinfo->GetTypeAttr(&type_attr))) {
+    VARDESC* var_desc;
+    for (UINT i = 0; i < type_attr->cVars; i++) {
+      if (SUCCEEDED(typeinfo->GetVarDesc(i, &var_desc))) {
+        CComBSTR var_name_bstr;
+        if (SUCCEEDED(typeinfo->GetDocumentation(var_desc->memid,
+                                                 &var_name_bstr,
+                                                 NULL, NULL, NULL))
+            && var_name_bstr.Length() > 0) {
+          std::wstring var_name = var_name_bstr;
+          property_names->push_back(var_name);
+        } else {
+          LOG(WARN) << "Unable to get object variable documentation";
+        }
+        typeinfo->ReleaseVarDesc(var_desc);
+      } else {
+        LOG(WARN) << "Unable to get object variable description";
+      }
+    }
+    typeinfo->ReleaseTypeAttr(type_attr);
+  } else {
+    LOG(WARN) << "Unable to get object type";
   }
   return WD_SUCCESS;
 }
@@ -282,7 +299,7 @@ int VariantUtilities::GetArrayItem(const IECommandExecutor& executor,
                          long index,
                          Json::Value* item){
   LOG(TRACE) << "Entering Script::GetArrayItem";
-  std::wstring index_string = std::to_wstring(static_cast<long long>(index));
+  std::wstring index_string = StringUtilities::ToWString(static_cast<long long>(index));
   CComVariant array_item_variant;
   bool get_array_item_success = GetVariantObjectPropertyValue(array_dispatch,
                                                               index_string,

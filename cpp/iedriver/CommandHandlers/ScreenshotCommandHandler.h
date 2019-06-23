@@ -187,12 +187,19 @@ class ScreenshotCommandHandler : public IECommandHandler {
     }
     HDC device_context_handle = this->image_->GetDC();
 
+    /*
     BOOL print_result = ::PrintWindow(content_window_handle,
                                       device_context_handle,
                                       PW_CLIENTONLY);
     if (!print_result) {
       LOG(WARN) << "PrintWindow API is not able to get content window screenshot";
     }
+    */
+
+    // Windows 2000 has no PrintWindow API
+    HDC window_dc = GetWindowDC(content_window_handle);
+    BitBlt(device_context_handle, 0, 0, document_info.width, document_info.height, window_dc, 0, 0, SRCCOPY);
+    ReleaseDC(content_window_handle, window_dc);
 
     this->UninstallWindowsHook();
 
