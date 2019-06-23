@@ -37,7 +37,7 @@ class GetSessionCapabilitiesCommandHandler : public IECommandHandler {
                        Response* response) {
     Json::Value capabilities;
     capabilities[BROWSER_NAME_CAPABILITY] = "internet explorer";
-    capabilities[BROWSER_VERSION_CAPABILITY] = std::to_string(static_cast<long long>(executor.browser_version()));
+    capabilities[BROWSER_VERSION_CAPABILITY] = StringUtilities::ToString(static_cast<long long>(executor.browser_version()));
     capabilities[JAVASCRIPT_ENABLED_CAPABILITY] = true;
     capabilities[PLATFORM_CAPABILITY] = "WINDOWS";
     capabilities[NATIVE_EVENTS_CAPABILITY] = executor.input_manager()->enable_native_events();

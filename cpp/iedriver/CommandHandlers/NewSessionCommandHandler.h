@@ -36,7 +36,7 @@ class NewSessionCommandHandler : public IECommandHandler {
   void ExecuteInternal(const IECommandExecutor& executor,
                        const ParametersMap& command_parameters,
                        Response* response) {
-    std::string default_initial_url = "http://localhost:" + std::to_string(static_cast<long long>(executor.port())) + "/";
+    std::string default_initial_url = "http://localhost:" + StringUtilities::ToString(static_cast<long long>(executor.port())) + "/";
     IECommandExecutor& mutable_executor = const_cast<IECommandExecutor&>(executor);
     ParametersMap::const_iterator it = command_parameters.find("desiredCapabilities");
     if (it != command_parameters.end()) {

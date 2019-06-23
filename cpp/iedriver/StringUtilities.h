@@ -30,6 +30,10 @@ class StringUtilities {
   static std::wstring ToWString(const std::string& input);
   static std::string ToString(const std::wstring& input);
 
+  // str::to_wstring() and str::to_string() are not available in Visual Studio 2008
+  static std::wstring ToWString(const long long input);
+  static std::string ToString(const long long input);
+
   static std::string Format(const char* format, ...);
   static std::wstring Format(const wchar_t* format, ...);
   

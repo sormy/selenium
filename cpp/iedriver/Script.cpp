@@ -447,7 +447,7 @@ bool Script::ConvertResultToString(std::string* value) {
   
     case VT_I4:
       LOG(DEBUG) << "Result type is int";
-      *value = std::to_string(static_cast<long long>(this->result_.lVal));
+      *value = StringUtilities::ToString(static_cast<long long>(this->result_.lVal));
       return true;
 
     case VT_EMPTY:

@@ -135,11 +135,14 @@ DWORD BrowserFactory::LaunchBrowserProcess(std::string* error_message) {
       ::WaitForInputIdle(proc_info.hProcess, 2000);
       LOG(DEBUG) << "IE launched successfully with process ID " << process_id;
       std::vector<wchar_t> image_buffer(MAX_PATH);
+      // GetProcessImageFileName is not available in psapi.dll on Windows 2000
+      /*
       int buffer_count = ::GetProcessImageFileName(proc_info.hProcess, &image_buffer[0], MAX_PATH);
       std::wstring full_image_path = &image_buffer[0];
       size_t last_delimiter = full_image_path.find_last_of('\\');
       std::string image_name = StringUtilities::ToString(full_image_path.substr(last_delimiter + 1, buffer_count - last_delimiter));
       LOG(DEBUG) << "Process with ID " << process_id << " is executing " << image_name;
+      */
     }
 
     if (proc_info.hThread != NULL) {

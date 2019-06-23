@@ -402,6 +402,10 @@ HWND DocumentHost::FindContentWindowHandle(HWND top_level_window_handle) {
 
 int DocumentHost::GetDocumentMode(IHTMLDocument2* doc) {
   LOG(TRACE) << "Entering DocumentHost::GetDocumentMode";
+  // The highest version of IE available for Windows 2000 is IE6.
+  // IE6 has no compatibility mode, so don't need to guess the mode.
+  return 5;
+  /*
   CComPtr<IHTMLDocument6> mode_doc;
   doc->QueryInterface<IHTMLDocument6>(&mode_doc);
   if (!mode_doc) {
@@ -416,6 +420,7 @@ int DocumentHost::GetDocumentMode(IHTMLDocument2* doc) {
   }
   int document_mode = static_cast<int>(mode.fltVal);
   return document_mode;
+  */
 }
 
 bool DocumentHost::IsStandardsMode(IHTMLDocument2* doc) {

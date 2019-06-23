@@ -349,7 +349,8 @@ void ProxyManager::GetCurrentProxyType() {
   std::vector<INTERNET_PER_CONN_OPTION> proxy_type_options(1);
   unsigned long list_size = sizeof(INTERNET_PER_CONN_OPTION_LIST);
 
-  proxy_type_options[0].dwOption = INTERNET_PER_CONN_FLAGS_UI;
+  // INTERNET_PER_CONN_FLAGS_UI is not supported on Windows 2000
+  // proxy_type_options[0].dwOption = INTERNET_PER_CONN_FLAGS_UI;
 
   option_list.dwSize = sizeof(INTERNET_PER_CONN_OPTION_LIST);
   option_list.pszConnection = NULL;
@@ -357,6 +358,7 @@ void ProxyManager::GetCurrentProxyType() {
   option_list.dwOptionError = 0;
   option_list.pOptions = &proxy_type_options[0];
 
+  /*
   // First check for INTERNET_PER_CONN_FLAGS_UI, then if that fails
   // check again using INTERNET_PER_CONN_FLAGS. This is documented at
   // http://msdn.microsoft.com/en-us/library/windows/desktop/aa385145%28v=vs.85%29.aspx
@@ -368,9 +370,10 @@ void ProxyManager::GetCurrentProxyType() {
     this->current_proxy_type_ = proxy_type_options[0].Value.dwValue;
     return;
   }
+  */
 
   proxy_type_options[0].dwOption = INTERNET_PER_CONN_FLAGS;
-  success = ::InternetQueryOption(NULL,
+  BOOL success = ::InternetQueryOption(NULL,
                                   INTERNET_OPTION_PER_CONNECTION_OPTION,
                                   &option_list,
                                   &list_size);

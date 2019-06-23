@@ -244,7 +244,7 @@ void IEWebDriverManagerCommandExecutor::DispatchCommand() {
   } else {
     std::wstring serialized_command = StringUtilities::ToWString(this->current_command_.Serialize());
 
-    LPWSTR pszResult = nullptr;
+    LPWSTR pszResult = NULL;
 
     HRESULT hr = this->manager_->ExecuteCommand((LPWSTR)serialized_command.c_str(), &pszResult);
     std::wstring result(pszResult);

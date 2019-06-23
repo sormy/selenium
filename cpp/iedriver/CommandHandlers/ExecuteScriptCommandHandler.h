@@ -155,7 +155,7 @@ class ExecuteScriptCommandHandler : public IECommandHandler {
       if (index != 0) {
         array_script += L",";
       }
-      std::wstring index_string = std::to_wstring(static_cast<long long>(index));
+      std::wstring index_string = StringUtilities::ToWString(static_cast<long long>(index));
       array_script += L"arguments[" + index_string + L"]";
     }
     array_script += L"];}})();";
@@ -202,7 +202,7 @@ class ExecuteScriptCommandHandler : public IECommandHandler {
       if (counter != 0) {
         object_script += ",";
       }
-      std::string counter_string = std::to_string(static_cast<long long>(counter));
+      std::string counter_string = StringUtilities::ToString(static_cast<long long>(counter));
       std::string name = it.memberName();
       object_script += "\"" + name + "\"" + ":arguments[" + counter_string + "]";
       ++counter;
